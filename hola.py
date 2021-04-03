@@ -1,3 +1,1 @@
-ascmjsdbj
-csdcksand
-csdkj
+import numpy as np
