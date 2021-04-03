@@ -11,7 +11,7 @@ import h5py
 ######################## Input parameters #########################
 files = 3
 points = 100000
-distribution = 'uniform'   #uniform, lognormal, normal
+distribution = 'normal'   #uniform, lognormal, normal
 points_per_parameter = 1000
 
 ########### Be sure where to start #############
@@ -40,82 +40,15 @@ for j in range(existing_files,existing_files+files):
         par_lists =  []
         for n_par, item_par in enumerate(var_ranges.index): par_lists.append(random.choices(var_lists[n_par], k =points))
     elif distribution == 'normal':
-        pressure = np.random.normal(loc = 25250000, scale = 14289419, size = int(points*1.4))
-        pressure = np.delete(pressure, np.where(pressure>50000000))
-        pressure = np.delete(pressure, np.where(pressure<500000))
+        par_lists = []
+        for n_par, item_par in enumerate(var_ranges.index): 
+            mean = (var_ranges.loc[item_par,'Min'] + var_ranges.loc[item_par,'Max'])/2
+            std = (var_ranges.loc[item_par,'Max'] - var_ranges.loc[item_par,'Min'])/(12**0.5)
+            parametro_gen = np.random.normal(loc = mean, scale = std, size = int(points*1.4))
+            parametro_gen = np.delete(parametro_gen, np.where(parametro_gen>var_ranges.loc[item_par,'Max']))
+            parametro_gen = np.delete(parametro_gen, np.where(parametro_gen<var_ranges.loc[item_par,'Min']))
+            par_lists.append(parametro_gen[:points].tolist())
 
-        radius = np.random.normal(loc = 5.1E-8, scale = 2.83E-8, size = int(points*1.4))
-        radius = np.delete(radius, np.where(radius>1E-7))
-        radius = np.delete(radius, np.where(radius<2E-9))
-
-        porosity = np.random.normal(loc = 0.0525, scale = 0.0274, size = int(points*1.4))
-        porosity = np.delete(porosity, np.where(porosity>0.1))
-        porosity = np.delete(porosity, np.where(porosity<0.005))
-
-        tortuosity = np.random.normal(loc = 4.3, scale = 0.866, size = int(points*1.4))
-        tortuosity = np.delete(tortuosity, np.where(tortuosity>5.8))
-        tortuosity = np.delete(tortuosity, np.where(tortuosity<2.8))
-
-        op = np.random.normal(loc = 70500000, scale = 11258330, size = int(points*1.4))
-        op = np.delete(op, np.where(op>90000000))
-        op = np.delete(op, np.where(op<51000000))
-
-        q = np.random.normal(loc = 0.035, scale = 0.012, size = int(points*1.4))
-        q = np.delete(q, np.where(q>0.056))
-        q = np.delete(q, np.where(q<0.014))
-
-        t = np.random.normal(loc = 0.03, scale = 0.00577, size = int(points*1.4))
-        t = np.delete(t, np.where(t>0.04))
-        t = np.delete(t, np.where(t<0.02))
-
-        k = np.random.normal(loc = 1.05, scale = 0.548, size = int(points*1.4))
-        k = np.delete(k, np.where(k>2))
-        k = np.delete(k, np.where(k<0.1))
-
-        fd = np.random.normal(loc = 2.5, scale = 0.231, size = int(points*1.4))
-        fd = np.delete(fd, np.where(fd>2.9))
-        fd = np.delete(fd, np.where(fd<2.1))
-
-        ih = np.random.normal(loc = 14000, scale = 1154.7, size = int(points*1.4))
-        ih = np.delete(ih, np.where(ih>16000))
-        ih = np.delete(ih, np.where(ih<12000))
-
-        lp0 = np.random.normal(loc = 84500000, scale = 25114615, size = int(points*1.4))
-        lp0 = np.delete(lp0, np.where(lp0>128000000))
-        lp0 = np.delete(lp0, np.where(lp0<41000000))
-
-        a0 = np.random.normal(loc = 1.19, scale = 0.1, size = int(points*1.4))
-        a0 = np.delete(a0, np.where(a0>1.36))
-        a0 = np.delete(a0, np.where(a0<1.02))
-
-        a1 = np.random.normal(loc = 4, scale = 1.155, size = int(points*1.4))
-        a1 = np.delete(a1, np.where(a1>6))
-        a1 = np.delete(a1, np.where(a1<2))
-
-        beta = np.random.normal(loc = 0.4, scale = 0.115, size = int(points*1.4))
-        beta = np.delete(beta, np.where(beta>0.6))
-        beta = np.delete(beta, np.where(beta<0.2))
-
-        T = np.random.normal(loc = 405, scale = 39.26, size = int(points*1.4))
-        T = np.delete(T, np.where(T>473))
-        T = np.delete(T, np.where(T<337))
-
-        # Create normal distributions of the parameters, these were created with mean and variance equal to those of the uniform distributions
-        p_list = (pressure[:points]).tolist()           # Pore pressure                         Pa
-        ro_list = (radius[:points]).tolist()            # Pore radius                           m
-        por_list = (porosity[:points]).tolist()         # Porosity                              -
-        tor_list = (tortuosity[:points]).tolist()       # Tortuosity                            -
-        op_list = (op[:points]).tolist()                # Overburden pressure                   Pa
-        q_list = (q[:points]).tolist()                  # q exponent porosity power law         -
-        t_list = (t[:points]).tolist()                  # t exponent pore radius power law      -
-        k_list = (k[:points]).tolist()                  # Blockage/Migration ratio              -
-        fd_list = (fd[:points]).tolist()                # Fractal dimension of pore wall        -
-        ih_list = (ih[:points]).tolist()                # Isosteric Heat                      J/mol
-        lp0_list = (lp0[:points]).tolist()              # Langmuir pressure                     Pa
-        a0_list = (a0[:points]).tolist()                # Alpha zero                            -
-        a1_list = (a1[:points]).tolist()                # Alpha one                             -
-        beta_list = (beta[:points]).tolist()            # Beta                                  -
-        T_list = (T[:points]).tolist()                  # Temperature                           K
     elif distribution == 'lognormal':
         radius = np.random.lognormal(mean = -18.165, sigma = 1.01, size = int(points*1.4))
         radius = np.delete(radius, np.where(radius>1E-7))
