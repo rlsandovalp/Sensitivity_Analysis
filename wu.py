@@ -41,7 +41,6 @@ def wu(p,ro,por,tor,op,q,t,k,fd,ih,lp0,a0,a1,beta,T,f_z,f_vis,f_cg):
     D2 = (B2*R/M)/(1/(T*Z)+p*dzdp/(T*Z**2))
     D3 = (B3*R/M)/(1/(T*Z)+p*dzdp/(T*Z**2))
     DT = D1+D2+D3
-    print(D1/DT,D2/DT,D3/DT)
     return (D1/DT,D2/DT,D3/DT,(B1+B2+B3)*dpdl,kn,DT,Z,cg,vis)
 
 # This model returs %Jv, %Jk, %Js, J, kn
