@@ -11,7 +11,6 @@ distribution = 'lognormal'            #uniform, lognormal, normal
 old = 0               # 1 Yes, 2 No
 nclass = 100
 
-
 ######################## Initialize processing files #########################
 param_list = ['Radius','Porosity','Pressure','Tortuosity','q','t','Overburden Pressure','k', 'Fractal Dimension', 'Isosteric heat', 'lp0', 'a0', 'a1', 'beta', 'T']
 Npar = np.size(param_list)
