@@ -51,10 +51,10 @@ for ipar,item_par in enumerate (param_list):
         cond_skew[ipar,iclass]=skew(np.reshape(output_class,-1))
         cond_kurt[ipar,iclass]=3+kurtosis(np.reshape(output_class,-1))
     Si[ipar]=(np.var(cond_mean[ipar,:],ddof=1))/np.var(Output[:,1])
-    AMAE[ipar]=np.mean(abs(cond_mean[ipar,:]-np.mean(Output[:,1])))/np.mean(Output[:,1])
-    AMAV[ipar]=np.mean(abs(cond_var[ipar,:]-np.var(Output[:,1])))/np.var(Output[:,1])
-    AMAskew[ipar]=np.mean(abs(cond_skew[ipar,:]-skew(np.reshape(Output[:,1],-1))))/skew(np.reshape(Output[:,1],-1))
-    AMAkurt[ipar]=np.mean(abs(cond_kurt[ipar,:]-(3+kurtosis(np.reshape(Output[:,1],-1)))))/(3+kurtosis(np.reshape(Output[:,1],-1)))
+    AMAE[ipar]=np.mean(abs(cond_mean[ipar,:]-np.mean(Output[:,1])))/abs(np.mean(Output[:,1]))
+    AMAV[ipar]=np.mean(abs(cond_var[ipar,:]-np.var(Output[:,1])))/abs(np.var(Output[:,1]))
+    AMAskew[ipar]=np.mean(abs(cond_skew[ipar,:]-skew(np.reshape(Output[:,1],-1))))/abs(skew(np.reshape(Output[:,1],-1)))
+    AMAkurt[ipar]=np.mean(abs(cond_kurt[ipar,:]-(3+kurtosis(np.reshape(Output[:,1],-1)))))/abs(3+kurtosis(np.reshape(Output[:,1],-1)))
 
 np.savetxt('results_SA.txt',(AMAE,AMAV,AMAskew,AMAkurt,Si))
 
