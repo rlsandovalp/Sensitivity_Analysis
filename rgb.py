@@ -5,7 +5,7 @@ import os
 import matplotlib.pyplot as plt
 
 ######################## Input parameters #########################
-files = 100
+files = 2
 distribution = 'lognormal'       #uniform, lognormal, normal
 nclass = 100
 # The following list must be filled with the pairs of variables for each figure
@@ -69,6 +69,6 @@ for figura in figures:
     plt.tick_params(axis='y', labelsize=14)
     plt.xlabel(param_list[param_x], fontsize = 14)
     plt.ylabel(param_list[param_y], fontsize = 14)
-    plt.savefig('../../Figures/'+str(param_list[param_x])+'_'+str(param_list[param_y])+'_'+distribution+'.png', dpi=300)
+    # plt.savefig('../../Figures/'+str(param_list[param_x])+'_'+str(param_list[param_y])+'_'+distribution+'.png', dpi=300)
 
 

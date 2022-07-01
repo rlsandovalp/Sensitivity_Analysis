@@ -23,7 +23,7 @@ def wu(p,ro,por,tor,op,q,t,k,fd,ih,lp0,a0,a1,beta,T,f_z,f_vis,f_cg):
     wk = 1-wv
     lp = lp0 * math.exp(-ih/(R*T))
     theta = (p/Z)/(lp+p/Z)
-    rad = theta*dm
+    rad = theta*dm    ####AAAAAAAAAAAAAAAAAAAAAAAAA
     fc1 = (porosity/tor)*(1-rad/radius)**2
     fc2 = fc1 * (((1-rad/radius)**-2)-1)
     alpha = a0*2*math.atan(a1*kn**beta)/math.pi 

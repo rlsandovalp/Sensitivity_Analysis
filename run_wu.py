@@ -9,9 +9,9 @@ import h5py
 
 
 ######################## Input parameters #########################
-files = 3
+files = 100
 points = 100000
-distribution = 'lognormal'   #uniform, lognormal, normal
+distribution = 'uniform'   #uniform, lognormal, normal
 points_per_parameter = 1000
 
 ########### Be sure where to start #############
@@ -82,5 +82,6 @@ for j in range(existing_files,existing_files+files):
     G0.create_dataset("cg", data=np.array(results)[:,7])
     G0.create_dataset("viscosity", data=np.array(results)[:,8])
     G1 = hf.create_group("Flow")
-    G1.create_dataset("Results", data=results)
+    # G1.create_dataset("Results", data=results)
+    G1.create_dataset("Results", data=np.array(results)[:,:6])
     hf.close()
