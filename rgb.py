@@ -5,12 +5,12 @@ import os
 import matplotlib.pyplot as plt
 
 ######################## Input parameters #########################
-files = 2
-distribution = 'lognormal'       #uniform, lognormal, normal
+files = 37
+distribution = 'uniform'       #uniform, lognormal, normal
 nclass = 100
 # The following list must be filled with the pairs of variables for each figure
-# figures = [[2,0],[1,0],[2,14]]
-figures = [[2,0],[2,1],[2,3],[2,14],[1,0],[3,0]]
+figures = [[2,0],[2,1]]
+# figures = [[2,0],[2,1],[2,3],[2,14],[1,0],[3,0]]
 ######################## Initialize processing files #########################
 param_list = ['Radius','Porosity','Pressure','Tortuosity','q','t','Overburden Pressure','k', 'Fractal Dimension', 'Isosteric heat', 'lp0', 'a0', 'a1', 'beta', 'T']
 Npar = np.size(param_list)
@@ -69,6 +69,7 @@ for figura in figures:
     plt.tick_params(axis='y', labelsize=14)
     plt.xlabel(param_list[param_x], fontsize = 14)
     plt.ylabel(param_list[param_y], fontsize = 14)
+    plt.show()
     # plt.savefig('../../Figures/'+str(param_list[param_x])+'_'+str(param_list[param_y])+'_'+distribution+'.png', dpi=300)
 
 
