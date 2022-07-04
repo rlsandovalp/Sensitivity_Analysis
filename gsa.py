@@ -6,7 +6,7 @@ import matplotlib.ticker as mtick
 from timeit import default_timer as timer
 
 ######################## Input parameters #########################
-files = 10
+files = 3
 distribution = 'uniform'            #uniform, lognormal, normal
 # old = 0               # 1 Yes, 2 No
 nclass = 100
