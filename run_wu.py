@@ -10,7 +10,7 @@ import h5py
 
 ######################## Input parameters #########################
 files = 100
-points = 100000
+points = 100
 distribution = 'uniform'   #uniform, lognormal, normal
 points_per_parameter = 1000
 
