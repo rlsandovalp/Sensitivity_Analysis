@@ -1,19 +1,16 @@
 import numpy as np
-import pandas as pd
 import h5py
-import os
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 
 ######################## Input parameters #########################
-files = 37
-distribution = 'uniform'       #uniform, lognormal, normal
+files = 100
+distribution = 'lognormal'       #uniform, lognormal, normal
 nclass = 100
-# The following list must be filled with the pairs of variables for each figure
-figures = [[2,0],[2,1]]
-# figures = [[2,0],[2,1],[2,3],[2,14],[1,0],[3,0]]
+
 ######################## Initialize processing files #########################
-param_list = ['Radius','Porosity','Pressure','Tortuosity','q','t','Overburden Pressure','k', 'Fractal Dimension', 'Isosteric heat', 'lp0', 'a0', 'a1', 'beta', 'T']
-Npar = np.size(param_list)
+param_list = {'Radius': 0,'Porosity': 1,'Pressure': 2,'Tortuosity': 3,'q': 4,'t': 5,'Overburden Pressure': 6,'k': 7, 'Fractal Dimension': 8, 'Isosteric heat': 9, 'lp0': 10, 'a0': 11, 'a1': 12, 'beta': 13, 'T': 14}
+Npar = 15
 hf = h5py.File(distribution+"/results_wu_"+distribution+"1.hdf5", 'r')
 Npoints = (np.array((hf.get('Coordinates')).get('Radius'))).size
 hf.close()
@@ -28,48 +25,125 @@ for j in range (0,files):
         Sampling_Points[j*Npoints:(j+1)*Npoints,id_par] = np.array((hf.get('Coordinates')).get(item_par))
     Results[j*Npoints:(j+1)*Npoints,:] = np.array((hf.get('Flow')).get('Results'))[:,(0,1,2)]
     hf.close()
-    print('I joined '+str(j+1)+' files')
 
 ######################## Mean #########################
 
-for figura in figures:
-    param_x = figura[0]
-    param_y = figura[1]
-    Processing = np.zeros((Npoints*files,5))
-    Output = np.zeros((3,nclass,nclass))
+Processing = np.zeros((Npoints*files,5))
+Processing[:,2:5] = Results[:,0:3]
+Output = np.zeros((nclass,nclass,3))
 
-    Processing[:,0:2] = Sampling_Points[:,(param_y,param_x)]
-    Processing[:,2:5] = Results[:,0:3]
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize = (10.5,9))
 
-    x_min = Sampling_Points[:,param_x].min()
-    x_max = Sampling_Points[:,param_x].max()
-    y_min = Sampling_Points[:,param_y].min()
-    y_max = Sampling_Points[:,param_y].max()
+print('Figure 1')
+Processing[:,0:2] = Sampling_Points[:,(param_list['Pressure'],param_list['Radius'])]
+x_min = Processing[:,0].min()
+x_max = Processing[:,0].max()
+y_min = Processing[:,1].min()
+y_max = Processing[:,1].max()
+discret_x = (x_max-x_min)/nclass
+discret_y = (y_max-y_min)/nclass
 
-    discret_1 = (y_max-y_min)/nclass
-    discret_2 = (x_max-x_min)/nclass
+for iclass1 in range (nclass):
+    processing_class = Processing[Processing[:,1]<y_min+discret_y*(iclass1+1)]
+    processing_class = processing_class[processing_class[:,1]>y_min+discret_y*iclass1]
+    for iclass2 in range (0,nclass):
+        processing_class1 = processing_class[processing_class[:,0]<x_min+discret_x*(iclass2+1)]
+        processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
+        Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
 
-    for iclass1 in range (0,nclass):
-        print(iclass1)
-        processing_class = Processing[Processing[:,0]<y_min+discret_1*(iclass1+1)]
-        processing_class = processing_class[processing_class[:,0]>y_min+discret_1*iclass1]
-        for iclass2 in range (0,nclass):
-            processing_class1 = processing_class[processing_class[:,1]<x_min+discret_2*(iclass2+1)]
-            processing_class1 = processing_class1[processing_class1[:,1]>x_min+discret_2*iclass2]
-            for rgb in range(0,3):
-                Output[rgb,iclass1,iclass2] = np.mean(processing_class1[:,rgb+2])
-
-    Hola = np.zeros((nclass,nclass,3))
-    Hola[:,:,0] = Output[0,:,:]
-    Hola[:,:,1] = Output[1,:,:]
-    Hola[:,:,2] = Output[2,:,:]
-
-    plt.imshow(Hola, origin = 'lower', extent = [0,1,0,1])
-    plt.tick_params(axis='x', labelsize=14)
-    plt.tick_params(axis='y', labelsize=14)
-    plt.xlabel(param_list[param_x], fontsize = 14)
-    plt.ylabel(param_list[param_y], fontsize = 14)
-    plt.show()
-    # plt.savefig('../../Figures/'+str(param_list[param_x])+'_'+str(param_list[param_y])+'_'+distribution+'.png', dpi=300)
+axes[0,0].imshow(Output, origin = 'lower', extent = [0,1,0,1])
+axes[0,0].set_xticks(np.arange(0, 1.01, 0.5))
+axes[0,0].set_yticks(np.arange(0, 1.01, 0.5))
+axes[0,0].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[0,0].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[0,0].tick_params(axis = "x", labelsize = 16)
+axes[0,0].tick_params(axis = "y", labelsize = 16)
+axes[0,0].set_xlabel(r'$p$', fontsize = 18)
+axes[0,0].set_ylabel(r'$r_o$', fontsize = 18)
 
 
+print('Figure 2')
+Processing[:,0:2] = Sampling_Points[:,(param_list['Pressure'],param_list['Porosity'])]
+x_min = Processing[:,0].min()
+x_max = Processing[:,0].max()
+y_min = Processing[:,1].min()
+y_max = Processing[:,1].max()
+discret_x = (x_max-x_min)/nclass
+discret_y = (y_max-y_min)/nclass
+
+for iclass1 in range (nclass):
+    processing_class = Processing[Processing[:,1]<y_min+discret_y*(iclass1+1)]
+    processing_class = processing_class[processing_class[:,1]>y_min+discret_y*iclass1]
+    for iclass2 in range (0,nclass):
+        processing_class1 = processing_class[processing_class[:,0]<x_min+discret_x*(iclass2+1)]
+        processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
+        Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
+
+axes[0,1].imshow(Output, origin = 'lower', extent = [0,1,0,1])
+axes[0,1].set_xticks(np.arange(0, 1.01, 0.5))
+axes[0,1].set_yticks(np.arange(0, 1.01, 0.5))
+axes[0,1].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[0,1].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[0,1].tick_params(axis = "x", labelsize = 16)
+axes[0,1].tick_params(axis = "y", labelsize = 16)
+axes[0,1].set_xlabel(r'$p$', fontsize = 18)
+axes[0,1].set_ylabel(r'$\phi_o$', fontsize = 18)
+
+
+
+print('Figure 3')
+Processing[:,0:2] = Sampling_Points[:,(param_list['Pressure'],param_list['Tortuosity'])]
+x_min = Processing[:,0].min()
+x_max = Processing[:,0].max()
+y_min = Processing[:,1].min()
+y_max = Processing[:,1].max()
+discret_x = (x_max-x_min)/nclass
+discret_y = (y_max-y_min)/nclass
+
+for iclass1 in range (nclass):
+    processing_class = Processing[Processing[:,1]<y_min+discret_y*(iclass1+1)]
+    processing_class = processing_class[processing_class[:,1]>y_min+discret_y*iclass1]
+    for iclass2 in range (0,nclass):
+        processing_class1 = processing_class[processing_class[:,0]<x_min+discret_x*(iclass2+1)]
+        processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
+        Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
+
+axes[1,0].imshow(Output, origin = 'lower', extent = [0,1,0,1])
+axes[1,0].set_xticks(np.arange(0, 1.01, 0.5))
+axes[1,0].set_yticks(np.arange(0, 1.01, 0.5))
+axes[1,0].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,0].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,0].tick_params(axis = "x", labelsize = 16)
+axes[1,0].tick_params(axis = "y", labelsize = 16)
+axes[1,0].set_xlabel(r'$p$', fontsize = 18)
+axes[1,0].set_ylabel(r'$\tau$', fontsize = 18)
+
+
+
+print('Figure 4')
+Processing[:,0:2] = Sampling_Points[:,(param_list['Pressure'],param_list['T'])]
+x_min = Processing[:,0].min()
+x_max = Processing[:,0].max()
+y_min = Processing[:,1].min()
+y_max = Processing[:,1].max()
+discret_x = (x_max-x_min)/nclass
+discret_y = (y_max-y_min)/nclass
+
+for iclass1 in range (nclass):
+    processing_class = Processing[Processing[:,1]<y_min+discret_y*(iclass1+1)]
+    processing_class = processing_class[processing_class[:,1]>y_min+discret_y*iclass1]
+    for iclass2 in range (0,nclass):
+        processing_class1 = processing_class[processing_class[:,0]<x_min+discret_x*(iclass2+1)]
+        processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
+        Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
+
+axes[1,1].imshow(Output, origin = 'lower', extent = [0,1,0,1])
+axes[1,1].set_xticks(np.arange(0, 1.01, 0.5))
+axes[1,1].set_yticks(np.arange(0, 1.01, 0.5))
+axes[1,1].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,1].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,1].tick_params(axis = "x", labelsize = 16)
+axes[1,1].tick_params(axis = "y", labelsize = 16)
+axes[1,1].set_xlabel(r'$p$', fontsize = 18)
+axes[1,1].set_ylabel(r'$T$', fontsize = 18)
+plt.show()

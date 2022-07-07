@@ -49,19 +49,19 @@ for j in range(existing_files,existing_files+files):
             par_lists.append(parametro_gen[:points].tolist())
     elif distribution == 'lognormal':
         par_lists = []
-        mean = (var_ranges.loc['p','Min'] + var_ranges.loc['p','Max'])/2
-        std = (var_ranges.loc['p','Max'] - var_ranges.loc['p','Min'])/(12**0.5)
+        mean = (var_ranges.loc['Pressure','Min'] + var_ranges.loc['Pressure','Max'])/2
+        std = (var_ranges.loc['Pressure','Max'] - var_ranges.loc['Pressure','Min'])/(12**0.5)
         pressure = np.random.normal(loc = mean, scale = std, size = int(points*1.4))
-        pressure = np.delete(pressure, np.where(pressure>var_ranges.loc['p','Max']))
-        pressure = np.delete(pressure, np.where(pressure<var_ranges.loc['p','Min']))
+        pressure = np.delete(pressure, np.where(pressure>var_ranges.loc['Pressure','Max']))
+        pressure = np.delete(pressure, np.where(pressure<var_ranges.loc['Pressure','Min']))
         par_lists.append(pressure[:points].tolist())
         radius = np.random.lognormal(mean = -18.165, sigma = 1.01, size = int(points*1.4))   # This parameters correspond to a given mean specified in the article
         radius = np.delete(radius, np.where(radius>1E-7))
         radius = np.delete(radius, np.where(radius<2E-9))
         par_lists.append(radius[:points].tolist())
         a = var_ranges.index.tolist()
-        a.remove('p')
-        a.remove('ro')
+        a.remove('Pressure')
+        a.remove('Radius')
         for n_par, item_par in enumerate(a): 
             mean = (var_ranges.loc[item_par,'Min'] + var_ranges.loc[item_par,'Max'])/2
             std = (var_ranges.loc[item_par,'Max'] - var_ranges.loc[item_par,'Min'])/(12**0.5)

@@ -1,41 +1,28 @@
 import numpy as np
 import h5py
 from scipy.stats import skew, norm, kurtosis
-from matplotlib import pyplot as plt 
-import matplotlib.ticker as mtick
-from timeit import default_timer as timer
 
 ######################## Input parameters #########################
-files = 3
-distribution = 'uniform'            #uniform, lognormal, normal
-# old = 0               # 1 Yes, 2 No
+files = 200
+distribution = 'Uniform'            #uniform, lognormal, normal
 nclass = 100
 
 ######################## Initialize processing files #########################
 param_list = ['Radius','Porosity','Pressure','Tortuosity','T','q','t','Overburden Pressure','k', 'Fractal Dimension', 'Isosteric heat', 'lp0', 'a0', 'a1', 'beta']
 Npar = np.size(param_list)
 hf = h5py.File(distribution+"/results_wu_"+distribution+"1.hdf5", 'r')
-# if old == 1:
-#     hf.close()
-#     hf = h5py.File(distribution+"_old/results_wu_"+distribution+"1.hdf5", 'r')
-
 Npoints = (np.array((hf.get('Coordinates')).get('Radius'))).size
 hf.close()
 Sampling_Points = np.zeros((Npoints*files,Npar))
 Results = np.zeros(Npoints*files)
+sm = np.zeros(4)
 
 ######################## Read files and join them in only one array #########################
 for j in range (0,files):
-    # if old == 1:
-    #     filename = distribution+"_old/results_wu_"+distribution+str(j)+".hdf5"
-    # else:
     filename = distribution+"/results_wu_"+distribution+str(j)+".hdf5"
     hf = h5py.File(filename, 'r')
     for id_par,item_par in enumerate(param_list):
         Sampling_Points[j*Npoints:(j+1)*Npoints,id_par] = np.array((hf.get('Coordinates')).get(item_par))
-    # if old == 1:
-    #     Results[j*Npoints:(j+1)*Npoints] = np.array((hf.get('Flow')).get('J_0.1'))[:,0]
-    # else:
     Results[j*Npoints:(j+1)*Npoints] = np.array((hf.get('Flow')).get('Results'))[:,3]
     hf.close()
     print(j)
@@ -44,6 +31,11 @@ print('Mean ', np.mean(Results))
 print('Var ', np.var(Results))
 print('Skew ', skew(Results))
 print('Kurt ', 3 + kurtosis(Results))
+
+sm[0] = np.mean(Results)
+sm[1] = np.var(Results)
+sm[2] = skew(Results)
+sm[3] = 3 + kurtosis(Results)
 
 cond_mean=np.zeros((Npar,nclass))
 cond_var=np.zeros((Npar,nclass))
@@ -85,3 +77,4 @@ np.savetxt('Results/'+distribution+'_CM.txt',cond_mean)
 np.savetxt('Results/'+distribution+'_CV.txt',cond_var)
 np.savetxt('Results/'+distribution+'_CS.txt',cond_skew)
 np.savetxt('Results/'+distribution+'_CK.txt',cond_kurt)
+np.savetxt('Results/'+distribution+'_SM.txt',sm)
