@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('../SA_results.txt', sep = '\t', index_col = 0)
+data = pd.read_csv('Results/SA_results.txt', sep = '\t', index_col = 0)
 
 fig = plt.figure(figsize=(10,8))
 ax = fig.add_subplot(111)
