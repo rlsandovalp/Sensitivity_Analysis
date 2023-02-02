@@ -51,13 +51,15 @@ for iclass1 in range (nclass):
         processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
         Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
 
-axes[0,0].imshow(Output, origin = 'lower', extent = [0,1,0,1])
-axes[0,0].set_xticks(np.arange(0, 1.01, 0.5))
-axes[0,0].set_yticks(np.arange(0, 1.01, 0.5))
-axes[0,0].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-axes[0,0].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-axes[0,0].tick_params(axis = "x", labelsize = 16)
+axes[0,0].imshow(Output, origin = 'lower', extent = [0,100,0,100])
+axes[0,0].set_xticks(np.arange(0, 101, 50))
+axes[0,0].set_yticks(np.arange(0, 101, 50))
+axes[0,0].xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+axes[0,0].yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+axes[0,0].tick_params(axis = "x", labelsize = 16, top = 1)
 axes[0,0].tick_params(axis = "y", labelsize = 16)
+axes[0,0].xaxis.set_ticks_position('top')
+axes[0,0].xaxis.set_label_position('top')
 axes[0,0].set_xlabel(r'$p$', fontsize = 18)
 axes[0,0].set_ylabel(r'$r_o$', fontsize = 18)
 
@@ -79,20 +81,22 @@ for iclass1 in range (nclass):
         processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
         Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
 
-axes[0,1].imshow(Output, origin = 'lower', extent = [0,1,0,1])
-axes[0,1].set_xticks(np.arange(0, 1.01, 0.5))
-axes[0,1].set_yticks(np.arange(0, 1.01, 0.5))
-axes[0,1].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-axes[0,1].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[0,1].imshow(Output, origin = 'lower', extent = [0,100,0,100])
+axes[0,1].set_xticks(np.arange(0, 101, 50))
+axes[0,1].set_yticks(np.arange(0, 101, 50))
+axes[0,1].xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+axes[0,1].yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
 axes[0,1].tick_params(axis = "x", labelsize = 16)
 axes[0,1].tick_params(axis = "y", labelsize = 16)
+axes[0,1].xaxis.set_ticks_position('top')
+axes[0,1].xaxis.set_label_position('top')
 axes[0,1].set_xlabel(r'$p$', fontsize = 18)
 axes[0,1].set_ylabel(r'$\phi_o$', fontsize = 18)
 
 
 
 print('Figure 3')
-Processing[:,0:2] = Sampling_Points[:,(param_list['Pressure'],param_list['Tortuosity'])]
+Processing[:,0:2] = Sampling_Points[:,(param_list['Radius'],param_list['Porosity'])]
 x_min = Processing[:,0].min()
 x_max = Processing[:,0].max()
 y_min = Processing[:,1].min()
@@ -108,15 +112,15 @@ for iclass1 in range (nclass):
         processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
         Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
 
-axes[1,0].imshow(Output, origin = 'lower', extent = [0,1,0,1])
-axes[1,0].set_xticks(np.arange(0, 1.01, 0.5))
-axes[1,0].set_yticks(np.arange(0, 1.01, 0.5))
-axes[1,0].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-axes[1,0].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,0].imshow(Output, origin = 'lower', extent = [0,100,0,100])
+axes[1,0].set_xticks(np.arange(0, 101, 50))
+axes[1,0].set_yticks(np.arange(0, 101, 50))
+axes[1,0].xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+axes[1,0].yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
 axes[1,0].tick_params(axis = "x", labelsize = 16)
 axes[1,0].tick_params(axis = "y", labelsize = 16)
-axes[1,0].set_xlabel(r'$p$', fontsize = 18)
-axes[1,0].set_ylabel(r'$\tau$', fontsize = 18)
+axes[1,0].set_xlabel(r'$r_o$', fontsize = 18)
+axes[1,0].set_ylabel(r'$\phi_o$', fontsize = 18)
 
 
 
@@ -137,13 +141,14 @@ for iclass1 in range (nclass):
         processing_class1 = processing_class1[processing_class1[:,0]>x_min+discret_x*iclass2]
         Output[iclass1,iclass2,:] = np.mean(processing_class1[:,2:5], axis = 0)
 
-axes[1,1].imshow(Output, origin = 'lower', extent = [0,1,0,1])
-axes[1,1].set_xticks(np.arange(0, 1.01, 0.5))
-axes[1,1].set_yticks(np.arange(0, 1.01, 0.5))
-axes[1,1].xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-axes[1,1].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+axes[1,1].imshow(Output, origin = 'lower', extent = [0,100,0,100])
+axes[1,1].set_xticks(np.arange(0, 101, 50))
+axes[1,1].set_yticks(np.arange(0, 101, 50))
+axes[1,1].xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+axes[1,1].yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
 axes[1,1].tick_params(axis = "x", labelsize = 16)
 axes[1,1].tick_params(axis = "y", labelsize = 16)
 axes[1,1].set_xlabel(r'$p$', fontsize = 18)
 axes[1,1].set_ylabel(r'$T$', fontsize = 18)
+plt.tight_layout()
 plt.show()
