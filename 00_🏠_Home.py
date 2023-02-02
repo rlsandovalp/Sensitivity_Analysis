@@ -16,7 +16,7 @@ r"""
 ## Objective
 To illustrate:
 - What Sensitivity Analysis is and what Moment-based AMA indices are
-- What information one needs to perform a numerical SA via AMA indices
+- What information one needs to perform a numerical Sensitivity Analysis via AMA indices
 - What additional products you can get with the information required for SA
 - Example 1 - Ishigami Function
 - Example 2 - Gas flow in low permeable materials (Under construction)
