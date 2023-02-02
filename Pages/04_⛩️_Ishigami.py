@@ -100,11 +100,6 @@ cond_y_ana_mean.append(a/2 - 1/5*(5+b*math.pi**4)*np.sin(2*math.pi*np.array(cond
 cond_y_ana_mean.append(a*np.sin(2*math.pi*np.array(cond_x[1]))**2)
 cond_y_ana_mean.append(a/2*np.ones(N_intervals))
 
-print(len(cond_x[2]))
-print(len(cond_y[2]))
-print(len(cond_y_ana_mean[2]))
-
-
 cond_y_ana_var.append(a**2/8 + 8*b**2*math.pi**8/225*(1-np.cos(4*math.pi*np.array(cond_x[0]))))
 cond_y_ana_var.append(0.5+b*math.pi**4*(0.2+b/18*math.pi**4)*np.ones(N_intervals))
 cond_y_ana_var.append(a**2/8+0.5*(1+b*math.pi**4*(1-2*np.array(cond_x[2]))**4)**2)
