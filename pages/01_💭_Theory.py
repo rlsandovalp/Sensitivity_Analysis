@@ -1,4 +1,3 @@
-from app_common import *
 import streamlit as st
 
 st.set_page_config(
