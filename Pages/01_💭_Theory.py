@@ -1,5 +1,4 @@
-import numpy as np
-import pandas as pd
+from app_common import *
 import streamlit as st
 
 st.set_page_config(
