@@ -31,12 +31,14 @@ def cond_plots(cond_x, cond_y, uncond):
 
 def AMAE_indices(AMA):
     x = ('x1', 'x2', 'x3')
-    if SM == 'Mean':
-        aronne = [0.75, 0.64, 0.0]
-    else:
-        aronne = [0.40, 0.29, 0.84]
     X_axis = np.arange(len(x))
     fig, ax = plt.subplots(figsize = (8,3))
+    if SM == 'Mean':
+        aronne = [0.75, 0.64, 0.0]
+        ax.set_ylabel('AMAE')
+    else:
+        aronne = [0.40, 0.29, 0.84]
+        ax.set_ylabel('AMAV')
     ax.bar(X_axis - 0.2, AMA, width = 0.4, label = 'Numerical')
     ax.bar(X_axis + 0.2, aronne, width = 0.4, label = 'Analytical')
     ax.set_xticks(X_axis, x)

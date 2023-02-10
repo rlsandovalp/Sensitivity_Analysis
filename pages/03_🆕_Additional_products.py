@@ -16,14 +16,17 @@ def cond_plots(cond_x, cond_y, uncond):
         if SM == 'Mean':
             UC = uncond[0]
             ax[var].plot(cond_x[var], cond_y[var], '.', label = '$E[y|x_'+str(var+1)+']$')
+            ax[var].plot(cond_x[var], cond_y_ana_mean[var], label = 'Analytical')
+            ax[0].set_ylabel(r'$E[y]$')
         else:
             UC = uncond[1]
             ax[var].plot(cond_x[var], cond_y[var], '.', label = '$V[y|x_'+str(var+1)+']$')
+            ax[var].plot(cond_x[var], cond_y_ana_var[var], label = 'Analytical')
+            ax[0].set_ylabel(r'$V[y]$')
         ax[var].plot(np.linspace(xlims[var][0], xlims[var][1], N_intervals), UC*np.ones(N_intervals), label = 'Uncond')
         ax[var].set_xlim(xlims[var][0], xlims[var][1])
         ax[var].set_xlabel(vars[var])
         ax[var].legend()
-    ax[0].set_ylabel(r'$y$')
     return fig
 
 r'''
@@ -57,6 +60,9 @@ N_vars = len(vars)
 
 cond_x = [[] for _ in range(N_vars)]
 cond_y = [[] for _ in range(N_vars)]
+cond_y_ana_mean = []
+cond_y_ana_var = []
+
 
 xlims = [[2,3],[1,5]]
 dx = [(xlims[i][1]-xlims[i][0])/N_intervals for i in range(N_vars)]
@@ -64,10 +70,7 @@ dx = [(xlims[i][1]-xlims[i][0])/N_intervals for i in range(N_vars)]
 x = [np.random.rand(N_sims)*(xlims[i][1]-xlims[i][0])+xlims[i][0] for i in range(N_vars)]
 y = x[0]**2+3*x[1]
 
-uncond = np.mean(y)
-
 uncond = [np.mean(y), np.var(y)]
-
 
 for i in range(N_intervals):
     for var in range(N_vars):
@@ -77,6 +80,11 @@ for i in range(N_intervals):
         else:
             cond_y[var].append(np.var(y[(x[var]>xlims[var][0]+dx[var]*i) & (x[var]<xlims[var][0]+dx[var]*(i+1))]))
 
+cond_y_ana_mean.append(np.array(cond_x[0])**2+9)
+cond_y_ana_mean.append(19/3+3*np.array(cond_x[1]))
+
+cond_y_ana_var.append(12*np.ones(N_intervals))
+cond_y_ana_var.append(2.08*np.ones(N_intervals))
 
 
 st.pyplot(cond_plots(cond_x, cond_y, uncond))
