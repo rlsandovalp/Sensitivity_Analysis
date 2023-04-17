@@ -2,34 +2,21 @@ import math
 import pandas as pd
 from scipy import interpolate
 
-athm_pr = 100000                        # MPa
-dm = 3.8E-10                            # meters
-R = 8.314462                            # J/(mol - K)
-M = 1.6E-2                              # kg/mol
-Na = 6.0221415E23                       # 1/mol
+athm_pr = 100000                           # [Pa]
+dm = 3.8E-10                               # [-]
+R = 8.314462                               # [J/(mol - K)]
+M = 1.6E-2                                 # [kg/mol]
+Na = 6.0221415E23                          # [1/mol]
 b = -1
-dpdl = 0.1                             # MPa/m
+dpdl = 0.1                                 # [MPa/m]
 
-# p [Pa]
-# ro [m]
-# por [-]
-# tor [-]
-# op [Pa]
-# q []
-# t[]
-# k []
-# fd []
-# ih [J/mol]
-# lp0 [Pa]
-# T [K]
-# a0 [], a1 [], beta []
-
-
-def wu(p,ro,por,tor,op,q,t,k,fd,ih,lp0,a0,a1,beta,T,f_z,f_vis,f_cg):
+def wu(p,ro,por,tor,op,q,t,k,fd,ih,lp0,a0,a1,beta,T,f_z,f_vis,f_cg,f_rho):
     Z = interpolate.bisplev(p,T,f_z)
     vis = interpolate.bisplev(p,T,f_vis)
+    rho = interpolate.bisplev(p,T,f_rho)
     cg = f_cg(p)
     dzdp = (interpolate.bisplev(p+10000,T,f_z)-interpolate.bisplev(p-10000,T,f_z))/20000
+    
     porosity = por*((op-p)/athm_pr)**-q  
     radius = ro*((op-p)/athm_pr)**-t 
     kn = (vis/(p*2*radius))*(math.pi*Z*R*T/(2*M))**0.5
@@ -55,9 +42,5 @@ def wu(p,ro,por,tor,op,q,t,k,fd,ih,lp0,a0,a1,beta,T,f_z,f_vis,f_cg):
     D2 = (B2*R/M)/(1/(T*Z)+p*dzdp/(T*Z**2))
     D3 = (B3*R/M)/(1/(T*Z)+p*dzdp/(T*Z**2))
     DT = D1+D2+D3
-    return (D1/DT,D2/DT,D3/DT,(B1+B2+B3)*dpdl*86400*365/1000,kn,DT,Z,cg,vis)
-
-# s*kg*m/s^2*m^2*m = kg/m^2*s
-
-# This model returs %Jv, %Jk, %Js, J [Ton/m^2*year], kn
-# After an update now it also returns the diffusion coefficient [m^2/s], Z, cg and viscosity
+    J = (B1+B2+B3)*dpdl*86400*365/1000
+    return (B1, B2, B3, J, D1, D2, D3, DT, kn, dzdp, Z, cg, vis, rho)

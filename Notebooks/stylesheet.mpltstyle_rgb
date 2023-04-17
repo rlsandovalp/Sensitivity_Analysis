@@ -1,0 +1,22 @@
+# Set fontsize and family
+xtick.labelsize : 6
+ytick.labelsize : 6
+font.family: STIXGeneral
+mathtext.fontset: stix
+
+
+# Remove padding
+figure.constrained_layout.use: True
+figure.constrained_layout.h_pad: 0.001
+figure.constrained_layout.w_pad: 0.001
+figure.constrained_layout.hspace: 0.001
+figure.constrained_layout.wspace: 0.001
+
+# Change ticks to face in instread of out
+xtick.bottom:False
+ytick.left:False
+
+# Remove legend box
+legend.frameon: False
+legend.fontsize: 6
+legend.numpoints: 3 

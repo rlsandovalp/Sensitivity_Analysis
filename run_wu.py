@@ -3,7 +3,7 @@ from scipy import interpolate
 import numpy as np
 import pandas as pd
 import os, os.path
-from wu import wu
+from Notebooks.wu import wu
 import random
 import h5py
 
