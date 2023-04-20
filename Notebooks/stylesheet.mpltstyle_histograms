@@ -3,6 +3,9 @@ font.size: 8
 font.family: STIXGeneral
 mathtext.fontset: stix
 
+axes.formatter.use_mathtext : True
+axes.formatter.limits : -3, 3
+
 
 # Remove padding
 figure.constrained_layout.use: True
